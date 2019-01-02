@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class WebController {
 
     private DefectList defectList = new DefectList();
-    private ArrayList<DefectOwner> defectOwnerList = new ArrayList<DefectOwner>();
+    public ArrayList<DefectOwner> defectOwnerList = new ArrayList<DefectOwner>();
 
     private void createDefectOwners()
     {
@@ -26,6 +26,10 @@ public class WebController {
     {
         createDefectOwners();
         return "index";
+    }
+    @GetMapping("/login")
+    public String showLogin(){
+        return "login";
     }
 
     @GetMapping("/addDefect")
