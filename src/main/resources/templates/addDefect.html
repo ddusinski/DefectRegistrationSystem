@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Add Defect</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div id="main-content" class="container">
+    <form class="form-group" th:action="@{/addDefect}" th:object="${defectForm}" method="post">
+        <div class="form-group">
+            <label for="defectowner">Defect owner:</label>
+            <select  th:field="*{defectOwner}" class="form-control" id="defectowner" >
+            <option th:each="owner : ${defektOwners}" th:value="${owner.ownerName}" th:text="${owner.ownerName}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="defectType">Defect type:</label>
+            <select th:field="*{defectType}" class="form-control" id="defectType">
+                <option th:value="Electric">Electric</option>
+                <option th:value="Structure">Structure</option>
+                <option th:value="Installation">Installation</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" th:field="*{description}" class="form-control" id="description">
+        </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>
