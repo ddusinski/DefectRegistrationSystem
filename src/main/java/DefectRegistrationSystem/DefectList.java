@@ -17,7 +17,7 @@ public class DefectList {
 
     public void addDefect()
     {
-        this.defectList.add(new Defect("Warbud", DefectType.Structure,"Wrong concrete"));
+        //this.defectList.add(new Defect("Warbud", DefectType.Structure,"Wrong concrete"));
     }
 
     public ArrayList<Defect> getDefectList() {
