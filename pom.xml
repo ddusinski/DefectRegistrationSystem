@@ -12,6 +12,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.3.RELEASE</version>
+        <!--todo użyj najnowszej wersji, wersje można sprawdzać na https://mvnrepository.com-->
     </parent>
 
 
@@ -19,7 +20,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.1.1.RELEASE</version>
+            <!--todo jeśli masz parenta, to nie musisz dawać wersji-->
+            <!--<version>2.1.1.RELEASE</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

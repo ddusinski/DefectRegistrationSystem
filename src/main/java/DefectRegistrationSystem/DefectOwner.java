@@ -1,5 +1,5 @@
 package DefectRegistrationSystem;
-
+//todo jesli twoja klasa z username i password jest taka prosta, to spring posiada klasa UserDetails i jej buildera,
 public class DefectOwner {
     private String ownerName;
     private String ownerPassword;

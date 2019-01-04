@@ -16,7 +16,9 @@
     <form class="form-group" th:action="@{/addDefectOwner}" method ="get">
         <button type="submit" class="btn btn-default">Add Defect Owner</button>
     </form>
-
+<!--todo jest cos takiego jak thymeleaf security Thymeleaf Extras Springsecurity4-->
+    <!--todo dzieki temu wyswietlac rzeczy tylko jak np. zalogowany uzytkownik ma konkretna role, bo teraz leci forbidden-->
+    <!--https://www.thymeleaf.org/doc/articles/springsecurity.html  4. pkt-->
     <form class="form-group" th:action="@{/defectTable}" method ="get">
         <button type="submit" class="btn btn-default">See List</button>
     </form>

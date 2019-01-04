@@ -15,7 +15,8 @@ import java.util.ArrayList;
 
 @Controller
 public class WebController {
-
+//todo ta lista chyba powinna być per usera a nie per aplikację, jeśli ja coś dodam, ty coś dodasz to mamy to samo, poczytaj jak działa
+// scope session i zrób beana z takim scopem a potem trzymaj detale uzytkownika w jego sesji springowej
     private DefectList defectList = new DefectList();
     private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
@@ -26,7 +27,7 @@ public class WebController {
     {
         this.inMemoryUserDetailsManager=inMemoryUserDetailsManager;
     }
-
+//todo takie zeczy jak ponizsza metoda mozna zrobic raz, zrob publiczna methode np. init i daj jej adnotacje @PostConstruct -> metoda wywola sie raz po utworzeniu kontrolera
     private void createDefectOwners()
     {
         //defectOwnerList.add(new DefectOwner("Warbud","1111"));
@@ -49,6 +50,7 @@ public class WebController {
     @GetMapping("/addDefect")
     public String showForm(Model model){
         //Defect defect = new Defect();
+//        todo typo
         model.addAttribute("defektOwners",this.defectOwnerList);
         model.addAttribute("defectForm", new Defect());
         return "addDefect";

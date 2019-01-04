@@ -1,4 +1,5 @@
 package DefectRegistrationSystem;
+//todo package powinien być zbudowany podobnie jak group id + nazwa aplikacji czyli w twoim wypadu np. pl.edu.pw.dusinski.defect
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
