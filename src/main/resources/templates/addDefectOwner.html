@@ -8,14 +8,14 @@
 </head>
 <body>
 <div content="main-content" class="container">
-    <form class="form-group" th:action="@{/addDefectOwner}" th:object="${addDefectOwnerForm}" method="post">
+    <form class="form-group" th:action="@{/addDefectOwner}" th:object="${user}" method="post">
         <div class="form-group">
             <label for="name">Defect Owner Name</label>
-            <input type="text" th:field="*{ownerName}" class="form-control" id="name">
+            <input type="text" th:field="*{name}" class="form-control" id="name">
         </div>
         <div class="form-group">
             <label for="password">Defect Owner Password</label>
-            <input type="text" th:field="*{ownerPassword}" class="form-control" id="password">
+            <input type="text" th:field="*{password}" class="form-control" id="password">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
 

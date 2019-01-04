@@ -15,7 +15,7 @@
         <div class="form-group">
             <label for="defectowner">Defect owner:</label>
             <select  th:field="*{defectOwner}" class="form-control" id="defectowner" >
-            <option th:each="owner : ${defektOwners}" th:value="${owner.ownerName}" th:text="${owner.ownerName}"></option>
+            <option th:each="owner : ${defektOwners}" th:value="${owner.name}" th:text="${owner.name}"></option>
             </select>
         </div>
         <div class="form-group">
