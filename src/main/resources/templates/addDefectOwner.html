@@ -8,7 +8,11 @@
 </head>
 <body>
 <div content="main-content" class="container">
-    <form class="form-group" th:action="@{/addDefectOwner}" th:object="${user}" method="post">
+    <div class="jumbotron">
+        <h1>Defect Registration System</h1>
+        <p>by Dusinski</p>
+    </div>
+    <form class="form-group" th:action="@{/addDefectOwner}" th:object="${defectOwner}" method="post">
         <div class="form-group">
             <label for="name">Defect Owner Name</label>
             <input type="text" th:field="*{name}" class="form-control" id="name">

@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Defect Registration System</h1>
+        <p>by Dusinski</p>
+    </div>
+
+
+    <div><h3>Enter your login and password:</h3></div>
     <div th:if="${param.error}">
         Invalid username and password.
     </div>
     <div th:if="${param.logout}">
         You have been logged out.
     </div>
-<form th:action="@{/login}" method="post">
+    <form th:action="@{/login}" method="post">
     <div>
         <label>User Name:
             <input type="text" name="username"/>
@@ -27,6 +40,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
         <input type="submit" value="Sign In">
     </div>
 
-</form>
+    </form>
+</div>
 </body>
 </html>

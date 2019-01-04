@@ -9,24 +9,24 @@ import java.util.List;
 
 /*
 public interface UserDaoInterface{
-    void save(User user);
-    List<User> list();
+    void save(DefectOwner user);
+    List<DefectOwner> list();
 }*/
 
 @Repository
-public class UserDao  {
+public class DefectOwnerDao {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     //@Override
-    public void save(User user){
-        sessionFactory.getCurrentSession().save(user);
+    public void save(DefectOwner defectOwner){
+        sessionFactory.getCurrentSession().save(defectOwner);
     }
 
     //@Override
-    public List<User> list(){
-        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("from User");
+    public List<DefectOwner> list(){
+        TypedQuery<DefectOwner> query = sessionFactory.getCurrentSession().createQuery("from DefectOwner");
         return query.getResultList();
     }
 }

@@ -1,22 +1,30 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Main Menu</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <div class="container">
+    <div class="jumbotron">
+        <h1>Defect Registration System</h1>
+        <p>by Dusinski</p>
+    </div>
+
     <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-    <form class="form-group" th:action="@{/addDefect}" method ="get">
-        <button type="submit" class="btn btn-default">Add Defect</button>
-    </form>
+    <div sec:authorize ="hasRole('ROLE_ADMIN')">
+            <form class="form-group" th:action="@{/addDefect}" method ="get">
+                <button type="submit" class="btn btn-default">Add Defect</button>
+            </form>
 
-    <form class="form-group" th:action="@{/addDefectOwner}" method ="get">
-        <button type="submit" class="btn btn-default">Add Defect Owner</button>
-    </form>
-
+            <form class="form-group" th:action="@{/addDefectOwner}" method ="get">
+                <button type="submit" class="btn btn-default">Add Defect Owner</button>
+            </form>
+    </div>
     <form class="form-group" th:action="@{/defectTable}" method ="get">
         <button type="submit" class="btn btn-default">See List</button>
     </form>

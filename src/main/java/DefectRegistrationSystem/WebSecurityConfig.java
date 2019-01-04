@@ -43,15 +43,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.authorizeRequests().antMatchers("/").authenticated();
-        //http.authorizeRequests().anyRequest().authenticated();
-        http.authorizeRequests().antMatchers("/index").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')");
-        http.authorizeRequests().antMatchers("/addDefect").access("hasRole('ROLE_ADMIN')");
-        http.authorizeRequests().antMatchers("/defectTable").access("hasRole('ROLE_USER')");
+        http.authorizeRequests().anyRequest().authenticated();
+        //http.authorizeRequests().antMatchers("/defectTable").access("hasRole('ROLE_ADMIN')");
+        //http.authorizeRequests().antMatchers("/addDefect","/addDefectOwner","/defectTable").access("hasRole('ROLE_ADMIN')");
+        //http.authorizeRequests().antMatchers("/defectTable").access("hasRole('ROLE_USER')");
         http.formLogin().loginPage("/login");
         http.formLogin().permitAll();
         http.logout().permitAll();
-
-
     }
 
 

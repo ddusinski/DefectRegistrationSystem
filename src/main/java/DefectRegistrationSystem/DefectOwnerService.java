@@ -8,21 +8,21 @@ import java.util.List;
 
 /*
 public interface UserService{
-    void save(User user);
-    List<User> list();
+    void save(DefectOwner user);
+    List<DefectOwner> list();
 }*/
 @Service
-public class UserService {
+public class DefectOwnerService {
 
     @Autowired
-    private UserDao userDao;
+    private DefectOwnerDao defectOwnerDao;
 
     @Transactional
-    public void save(User user){
-        userDao.save(user);
+    public void save(DefectOwner defectOwner){
+        defectOwnerDao.save(defectOwner);
     }
     @Transactional(readOnly = true)
-    public List<User> list(){
-        return userDao.list();
+    public List<DefectOwner> list(){
+        return defectOwnerDao.list();
     }
 }
