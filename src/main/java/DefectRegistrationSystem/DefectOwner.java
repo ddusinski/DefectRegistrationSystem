@@ -5,22 +5,27 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Email;
 
 @Entity
-@Table(name= "TBL_USERS")
+//@Table(name= "TBL_USERS")
 public class DefectOwner {
     @Id
-    @GeneratedValue
-    @Column(name="USER_ID")
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    //@Column(name="USER_ID")
     private Long id;
 
-    @Column(name = "USER_NAME")
+    //@Column(name = "USER_NAME")
     @NotEmpty(message = "Please Enter your name")
     private String name;
 
-    @Column(name = "USER_PASSWORD")
+    //@Column(name = "USER_PASSWORD")
     //@Email(message="{user.email.invalid}")
     private String password;
 
-  //  protected DefectOwner(){    }
+    protected DefectOwner(){}
+
+    public DefectOwner(String name, String password){
+        this.name=name;
+        this.password=password;
+    }
 
 
     public String getName() {

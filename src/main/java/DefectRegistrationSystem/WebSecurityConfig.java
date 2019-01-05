@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,11 +43,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
+        http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
         http.authorizeRequests().antMatchers("/").authenticated();
         http.authorizeRequests().anyRequest().authenticated();
         //http.authorizeRequests().antMatchers("/defectTable").access("hasRole('ROLE_ADMIN')");
         //http.authorizeRequests().antMatchers("/addDefect","/addDefectOwner","/defectTable").access("hasRole('ROLE_ADMIN')");
         //http.authorizeRequests().antMatchers("/defectTable").access("hasRole('ROLE_USER')");
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
         http.formLogin().loginPage("/login");
         http.formLogin().permitAll();
         http.logout().permitAll();

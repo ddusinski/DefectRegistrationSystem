@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /*
-public interface UserService{
-    void save(DefectOwner user);
-    List<DefectOwner> list();
-}*/
+
 @Service
 public class DefectOwnerService {
 
@@ -26,3 +23,4 @@ public class DefectOwnerService {
         return defectOwnerDao.list();
     }
 }
+*/

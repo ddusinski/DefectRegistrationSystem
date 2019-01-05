@@ -1,7 +1,9 @@
 package DefectRegistrationSystem;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -19,15 +21,17 @@ import java.util.ArrayList;
 
 
 @Controller
+
 public class WebController {
 
     private DefectList defectList = new DefectList();
     private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
-    @Autowired
-    private DefectOwnerService defectOwnerService;
+    //@Autowired
+    //private DefectOwnerService defectOwnerService;
 
-   // private DefectOwnerRepository repository;
+    @Autowired
+    private DefectOwnerRepository repository;
 
     @Autowired
     public WebController(InMemoryUserDetailsManager inMemoryUserDetailsManager)
@@ -48,7 +52,7 @@ public class WebController {
 
     @GetMapping("/addDefect")
     public String showForm(Model model){
-        model.addAttribute("defectOwner",this.defectOwnerService.list());
+       // model.addAttribute("defectOwner",this.defectOwnerService.list());
         model.addAttribute("defectForm", new Defect());
         return "addDefect";
     }
@@ -81,16 +85,26 @@ public class WebController {
     @PostMapping("/addDefectOwner")
     public String addDefectOwner(@ModelAttribute("user") @Valid DefectOwner defectOwner, BindingResult result, Model model){
         if (result.hasErrors()){
-            model.addAttribute("users", defectOwnerService.list());
+            //model.addAttribute("users", defectOwnerService.list());
             return "addDefectOwner";
         }
-        defectOwnerService.save(defectOwner);
+        //defectOwnerService.save(defectOwner);
         inMemoryUserDetailsManager.createUser(new User(defectOwner.getName(),"{noop}"+ defectOwner.getPassword(),new ArrayList<GrantedAuthority>()));
-       // repository.save(defectOwner);
-        //System.out.println(repository.findByDefectOwnerName(defectOwner.getName()));
+        repository.save(defectOwner);
+        System.out.println("Result:");
+        System.out.println(repository.findById(1L).get().getName());
         return "index";
+        }
+
+    @Bean
+    public CommandLineRunner demo(DefectOwnerRepository repository){
+        return (args) ->{
+            repository.save(new DefectOwner("Dominik", "123"));
+            System.out.println(repository.findById(1L));
+        };
+
+
+
     }
-
-
 
 }

@@ -1,4 +1,4 @@
-package DefectRegistrationSystem;
+/*package DefectRegistrationSystem;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ public class HibernateConfig {
         try {
             BasicDataSource dataSource = new BasicDataSource();
             dataSource.setDriverClassName("org.h2.Driver");
-            dataSource.setUrl("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1");
+            dataSource.setUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
             dataSource.setUsername("sa");
             dataSource.setPassword("sa");
             return dataSource;
@@ -54,3 +54,4 @@ public class HibernateConfig {
         return hibernateProperties;
     }
 }
+*/
