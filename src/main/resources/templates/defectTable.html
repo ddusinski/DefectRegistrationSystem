@@ -15,16 +15,22 @@
     <table class="table">
         <thead>
         <tr>
-            <td>Defekt Owner</td>
-            <td>Defekt Type</td>
-            <td>Defekt Description</td>
+            <td>Defect Id</td>
+            <td>Defect Owner</td>
+            <td>Defect Type</td>
+            <td>Defect Description</td>
+            <td>Defect Date</td>
+            <td>Defect Image</td>
         </tr>
         </thead>
         <tbody>
         <tr  th:each="defect:${defectList}">
+            <td th:text="${defect.getId()}"></td>
             <td th:text="${defect.getDefectOwner()}"></td>
             <td th:text="${defect.getDefectType()}"></td>
             <td th:text="${defect.getDescription()}"></td>
+            <td th:text="${defect.getDefectDate()}"></td>
+            <td><img th:src="@{'data:image/jpeg;base64,'+${defect.getImage()}}" style="height: 50px"></td>
         </tr>
     </tbody>
     </table>
