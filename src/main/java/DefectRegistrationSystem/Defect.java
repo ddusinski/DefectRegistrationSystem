@@ -34,7 +34,15 @@ public class Defect {
 
     @Lob
     String image;
+    public Defect(){}
 
+    public Defect(String defectOwner, DefectType defectType, String description, String defectDate){
+
+        this.defectOwner=defectOwner;
+        this.defectType=defectType;
+        this.description=description;
+        this.defectDate=defectDate;
+    }
 
     public DefectType getDefectType() {
         return defectType;
@@ -92,4 +100,5 @@ public class Defect {
     public void setImage(String image) {
         this.image = image;
     }
+
 }

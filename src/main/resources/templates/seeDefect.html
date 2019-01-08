@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>See Defect</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Defect Registration System</h1>
+        <p>by Dusinski</p>
+    </div>
+    <div class="container" th:object="${editedDefect}">
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td>Defect Details</td>
+                <td>Defect Properties</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Defect Id</td>
+                <td th:text="${editedDefect.getId()}"></td>
+
+            </tr>
+            <tr>
+                <td>Defect Owner</td>
+                <td th:text="${editedDefect.getDefectOwner()}"></td>
+            </tr>
+            <tr>
+                <td>Defect Type</td>
+                <td th:text="${editedDefect.getDefectType()}"></td>
+            </tr>
+
+            <tr>
+                <td>Defect Description</td>
+                <td th:text="${editedDefect.getDescription()}"></td>
+            </tr>
+            <tr>
+                <td>Defect Date</td>
+                <td th:text="${editedDefect.getDefectDate()}"></td>
+            </tr>
+            <tr>
+                <td>Defect Image</td>
+                <td><img th:src="@{'data:image/jpeg;base64,'+${editedDefect.getImage()}}" style="height: 50px"></td>
+            </tr>
+            <tr>
+                <td>Is repaired:</td>
+                <td><input type="checkbox" value="isRepaired">Check if the Defect is repaired</td>
+            </tr>
+            <tr>
+                <td>
+                    <form th:action="@{/}" method="get">
+                        <input type="submit" value="Go Menu">
+                    </form>
+                </td>
+                <td>
+                    <div>
+                        <input type="submit" value="Save">
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+</body>
+</html>

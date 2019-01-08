@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 
 
 @Controller
 public class WebController {
 
     private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    private Long editedDefectId;
     //private List<DefectOwner> defectOwnerList = new ArrayList<DefectOwner>();
     //private List<Defect> defectList = new ArrayList<Defect>();
 
@@ -38,6 +39,17 @@ public class WebController {
         this.inMemoryUserDetailsManager = inMemoryUserDetailsManager;
     }
 
+    @PostConstruct
+    private void initMethod() {
+        defectOwnerRepository.save(new DefectOwner("dd", "111"));
+        inMemoryUserDetailsManager.createUser(new User("dd", "{noop}" + "111", new ArrayList<GrantedAuthority>()));
+        defectOwnerRepository.save(new DefectOwner("KARMAR", "222"));
+        inMemoryUserDetailsManager.createUser(new User("KARMAR", "{noop}" + "222", new ArrayList<GrantedAuthority>()));
+
+
+        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", "2019-01-12"));
+        defectRepository.save(new Defect("Warbud", DefectType.Installation, "Wrong pipe", "2019-01-01"));
+    }
 
     @GetMapping("/")
     public String showMenu() {
@@ -59,26 +71,25 @@ public class WebController {
 
     @PostMapping("/addDefect")
     public String showDefectListForm(Model model, @ModelAttribute("defectForm") @Valid Defect defect, BindingResult result,
-                                     @RequestParam("file")MultipartFile file) {
-        if (result.hasErrors()){
+                                     @RequestParam("file") MultipartFile file) {
+        if (result.hasErrors()) {
             model.addAttribute("defectOwner", this.defectOwnerRepository.findAll());
 
             return "addDefect";
         }
         try {
-                defect.setImage(Base64.getEncoder().encodeToString(file.getBytes())); }
-        catch (Exception ie){}
+            defect.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+        } catch (Exception ie) {
+        }
 
         defectRepository.save(defect);
-        System.out.println(file.getOriginalFilename());
 
-        model.addAttribute("defectList", defectRepository.findAll());
-        return "defectTable";
+        return "index";
     }
 
     @GetMapping("/defectTable")
     public String showDefectListForm(Model model) {
-        model.addAttribute("defectList", (List<Defect>)defectRepository.findAll());
+        model.addAttribute("defectList", defectRepository.findAll());
         return "defectTable";
     }
 
@@ -96,6 +107,13 @@ public class WebController {
         inMemoryUserDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), new ArrayList<GrantedAuthority>()));
         defectOwnerRepository.save(defectOwner);
         return "index";
+    }
+
+    @GetMapping("/seeDefect")
+    public String editDefectForm(@RequestParam("editedDefectId") Long editedDefectId, Model model) {
+        model.addAttribute("editedDefect", defectRepository.findById(editedDefectId).get());
+        return "seeDefect";
+
     }
 
 }
