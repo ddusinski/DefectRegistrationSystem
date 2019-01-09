@@ -41,7 +41,6 @@ public class DefectOwner {
         this.id = id;
     }
 
-
     @NotEmpty(message = "Can not be empty")
     public String getPassword() {
         return password;
@@ -50,8 +49,6 @@ public class DefectOwner {
     public void setName(String name) {
         this.name = name;
     }
-
-
 
     public void setPassword(String email) {
         this.password = email;

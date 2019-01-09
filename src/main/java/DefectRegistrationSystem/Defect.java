@@ -1,20 +1,15 @@
 package DefectRegistrationSystem;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Base64;
-
 
 @Entity
 public class Defect {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull(message = "Can not be null, Please add Defect owner")
@@ -29,8 +24,9 @@ public class Defect {
     @DateTimeFormat(pattern = "dd-mm-yyyy")
     private String defectDate;
 
-
     private String imagePath;
+
+    private Boolean isRepaired;
 
     @Lob
     String image;
@@ -42,6 +38,7 @@ public class Defect {
         this.defectType=defectType;
         this.description=description;
         this.defectDate=defectDate;
+        this.isRepaired=false;
     }
 
     public DefectType getDefectType() {
@@ -101,4 +98,11 @@ public class Defect {
         this.image = image;
     }
 
+    public Boolean getRepaired() {
+        return isRepaired;
+    }
+
+    public void setRepaired(Boolean repaired) {
+        isRepaired = repaired;
+    }
 }

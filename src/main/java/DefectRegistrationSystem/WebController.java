@@ -1,8 +1,6 @@
 package DefectRegistrationSystem;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Controller;
@@ -13,20 +11,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Collections;
 
 
 @Controller
 public class WebController {
 
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
-    private Long editedDefectId;
-    //private List<DefectOwner> defectOwnerList = new ArrayList<DefectOwner>();
-    //private List<Defect> defectList = new ArrayList<Defect>();
+    @Autowired
+    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
     @Autowired
     private DefectOwnerRepository defectOwnerRepository;
@@ -34,21 +31,24 @@ public class WebController {
     @Autowired
     private DefectRepository defectRepository;
 
-    @Autowired
-    public WebController(InMemoryUserDetailsManager inMemoryUserDetailsManager) {
-        this.inMemoryUserDetailsManager = inMemoryUserDetailsManager;
-    }
-
     @PostConstruct
     private void initMethod() {
-        defectOwnerRepository.save(new DefectOwner("dd", "111"));
-        inMemoryUserDetailsManager.createUser(new User("dd", "{noop}" + "111", new ArrayList<GrantedAuthority>()));
+
+        defectOwnerRepository.save(new DefectOwner("Warbud", "111"));
+        inMemoryUserDetailsManager.createUser(new User("Warbud", "{noop}" + "111", Collections.emptyList()));
+
         defectOwnerRepository.save(new DefectOwner("KARMAR", "222"));
-        inMemoryUserDetailsManager.createUser(new User("KARMAR", "{noop}" + "222", new ArrayList<GrantedAuthority>()));
+        inMemoryUserDetailsManager.createUser(new User("KARMAR", "{noop}" + "222", Collections.emptyList()));
 
 
-        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", "2019-01-12"));
-        defectRepository.save(new Defect("Warbud", DefectType.Installation, "Wrong pipe", "2019-01-01"));
+        LocalDate date = LocalDate.now();
+        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", date.toString()));
+        defectRepository.deleteAll();
+        defectRepository.save(new Defect("KARMAR", DefectType.Installation, "Wrong lenght of cable", date.toString()));
+        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", date.toString()));
+        date = LocalDate.now().minusDays(5);
+        defectRepository.save(new Defect("Warbud", DefectType.Installation, "Wrong pipe", date.toString()));
+        defectRepository.save(new Defect("Warbud", DefectType.Electric, "Wrong cable", date.toString()));
     }
 
     @GetMapping("/")
@@ -81,15 +81,29 @@ public class WebController {
             defect.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
         } catch (Exception ie) {
         }
-
         defectRepository.save(defect);
-
         return "index";
     }
 
     @GetMapping("/defectTable")
-    public String showDefectListForm(Model model) {
+    public String showDefectListForm(Model model, Principal principal) {
+
+        if (principal.getName().equals("admin")) {
+            model.addAttribute("defectList", defectRepository.findAll());
+        } else {
+            model.addAttribute("defectList", defectRepository.findByDefectOwner(principal.getName()));
+        }
+        return "defectTable";
+    }
+
+    @PostMapping("defectTable")
+    public String showDefectListFormAfterDeletion(@ModelAttribute("deleteDefectId") Long deleteDefectId, Model model) {
+
+        Defect defect = defectRepository.findById(deleteDefectId).get();
+        defectRepository.delete(defect);
         model.addAttribute("defectList", defectRepository.findAll());
+        model.addAttribute("information", "Defect number " + defect.getId() + " was successfully deleted");
+
         return "defectTable";
     }
 
@@ -104,7 +118,7 @@ public class WebController {
         if (result.hasErrors()) {
             return "addDefectOwner";
         }
-        inMemoryUserDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), new ArrayList<GrantedAuthority>()));
+        inMemoryUserDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), Collections.emptyList()));
         defectOwnerRepository.save(defectOwner);
         return "index";
     }
@@ -116,4 +130,14 @@ public class WebController {
 
     }
 
+    @PostMapping("/seeDefect")
+    public String confirmDefectReparation(@RequestParam("defectIsRepaired") boolean defectIsRepaired, @RequestParam("editedDefectId") Long editedDefectId, Model model) {
+
+        Defect defect = defectRepository.findById(editedDefectId).get();
+        defect.setRepaired(defectIsRepaired);
+        defectRepository.save(defect);
+        model.addAttribute("editedDefect", defect);
+
+        return "seeDefect";
+    }
 }

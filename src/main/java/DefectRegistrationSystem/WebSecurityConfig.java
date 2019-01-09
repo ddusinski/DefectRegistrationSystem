@@ -2,29 +2,27 @@ package DefectRegistrationSystem;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
 import java.util.Properties;
-
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
+    @Value("adminPassword")
+    private String password;
+
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.userDetailsService(inMemoryUserDetailsManager());
-        //auth.inMemoryAuthentication().withUser("jdadmin").password(encoder.encode("111")).authorities("ROLE_ADMIN");
     }
 
     @Bean
