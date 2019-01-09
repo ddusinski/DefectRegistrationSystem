@@ -17,8 +17,6 @@ import java.util.Properties;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private InMemoryUserDetailsManager inMemoryUserDetailsManager;
-    @Value("adminPassword")
-    private String password;
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
