@@ -49,11 +49,11 @@
             </tr>
             <tr>
                 <td>Defect Image</td>
-                <td><img th:src="@{'data:image/jpeg;base64,'+${editedDefect.getImage()}}" style="height: 50px"></td>
+                <td><img th:src="@{'data:image/jpeg;base64,'+${editedDefect.getEncodedImage()}}" style="height: 200px"></td>
             </tr>
             <tr>
                 <td>Is repaired:</td>
-                <td><input type="checkbox" value="isRepaired" th:checked="${editedDefect.repaired}" disabled>Check if the Defect is repaired</td>
+                <td><input type="checkbox" value="isRepaired" th:checked="${editedDefect.repaired}" disabled>Defect is repaired</td>
             </tr>
             <tr>
                 <td>

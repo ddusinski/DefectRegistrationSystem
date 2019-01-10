@@ -1,4 +1,4 @@
-package DefectRegistrationSystem;
+package pl.dusinski.defectregistrationsystem.security;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +13,22 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import java.util.Properties;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+/*
     private InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(inMemoryUserDetailsManager());
-    }
+
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         final Properties users = new Properties();
         users.put("admin", "{noop}123,ROLE_ADMIN");
         return new InMemoryUserDetailsManager(users);
-    }
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

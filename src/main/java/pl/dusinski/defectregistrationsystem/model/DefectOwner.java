@@ -1,4 +1,4 @@
-package DefectRegistrationSystem;
+package pl.dusinski.defectregistrationsystem.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -22,7 +22,7 @@ public class DefectOwner {
     @NotNull(message = "Please Enter your password")
     private String password;
 
-    protected DefectOwner(){}
+    public DefectOwner(){}
 
     public DefectOwner(String name, String password){
         this.name=name;

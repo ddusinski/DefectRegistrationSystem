@@ -1,8 +1,12 @@
-package DefectRegistrationSystem;
+package pl.dusinski.defectregistrationsystem.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,45 +15,31 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import javax.annotation.PostConstruct;
+import pl.dusinski.defectregistrationsystem.model.Defect;
+import pl.dusinski.defectregistrationsystem.model.DefectOwner;
+import pl.dusinski.defectregistrationsystem.repository.DefectOwnerRepository;
+import pl.dusinski.defectregistrationsystem.repository.DefectRepository;
+
+
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.util.Base64;
 import java.util.Collections;
 
 
 @Controller
 public class WebController {
 
-    @Autowired
-    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
+    @Autowired
+    UserDetailsManager userDetailsManager;
     @Autowired
     private DefectOwnerRepository defectOwnerRepository;
 
     @Autowired
     private DefectRepository defectRepository;
 
-    @PostConstruct
-    private void initMethod() {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebController.class);
 
-        defectOwnerRepository.save(new DefectOwner("Warbud", "111"));
-        inMemoryUserDetailsManager.createUser(new User("Warbud", "{noop}" + "111", Collections.emptyList()));
-
-        defectOwnerRepository.save(new DefectOwner("KARMAR", "222"));
-        inMemoryUserDetailsManager.createUser(new User("KARMAR", "{noop}" + "222", Collections.emptyList()));
-
-
-        LocalDate date = LocalDate.now();
-        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", date.toString()));
-        defectRepository.deleteAll();
-        defectRepository.save(new Defect("KARMAR", DefectType.Installation, "Wrong lenght of cable", date.toString()));
-        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", date.toString()));
-        date = LocalDate.now().minusDays(5);
-        defectRepository.save(new Defect("Warbud", DefectType.Installation, "Wrong pipe", date.toString()));
-        defectRepository.save(new Defect("Warbud", DefectType.Electric, "Wrong cable", date.toString()));
-    }
 
     @GetMapping("/")
     public String showMenu() {
@@ -66,6 +56,7 @@ public class WebController {
         model.addAttribute("defectOwner", this.defectOwnerRepository.findAll());
         model.addAttribute("defectForm", new Defect());
 
+
         return "addDefect";
     }
 
@@ -78,19 +69,23 @@ public class WebController {
             return "addDefect";
         }
         try {
-            defect.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+            defect.setImage(file.getBytes());
         } catch (Exception ie) {
+            LOGGER.info("Image can not be loaded");
         }
         defectRepository.save(defect);
+        LOGGER.info("New Defect is added ID: {}, Defect Date: {}", defect.getId(), defect.getDefectDate());
         return "index";
     }
 
     @GetMapping("/defectTable")
     public String showDefectListForm(Model model, Principal principal) {
 
-        if (principal.getName().equals("admin")) {
+        if (principal != null && principal.getName().equals("admin")) {
             model.addAttribute("defectList", defectRepository.findAll());
-        } else {
+        } else
+            if(principal != null && !principal.getName().isEmpty())
+            {
             model.addAttribute("defectList", defectRepository.findByDefectOwner(principal.getName()));
         }
         return "defectTable";
@@ -107,6 +102,7 @@ public class WebController {
         return "defectTable";
     }
 
+
     @GetMapping("/addDefectOwner")
     public String addDefectOwnerForm(Model model) {
         model.addAttribute("defectOwner", new DefectOwner());
@@ -118,7 +114,9 @@ public class WebController {
         if (result.hasErrors()) {
             return "addDefectOwner";
         }
-        inMemoryUserDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), Collections.emptyList()));
+
+
+        userDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), Collections.emptyList()));
         defectOwnerRepository.save(defectOwner);
         return "index";
     }
@@ -137,6 +135,10 @@ public class WebController {
         defect.setRepaired(defectIsRepaired);
         defectRepository.save(defect);
         model.addAttribute("editedDefect", defect);
+
+        if (defectIsRepaired){
+            LOGGER.info("Defect ID: {} is repaired", defect.getId());
+        }
 
         return "seeDefect";
     }

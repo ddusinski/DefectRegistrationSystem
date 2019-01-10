@@ -37,7 +37,9 @@
             <td th:text="${defect.getDefectType()}"></td>
             <td th:text="${defect.getDescription()}"></td>
             <td th:text="${defect.getDefectDate()}"></td>
-            <td><img th:src="@{'data:image/jpeg;base64,'+${defect.getImage()}}" style="height: 50px"></td>
+            <td><img th:if="${defect.getEncodedImage()!=null}" th:src="@{'data:image/jpeg;base64,'+${defect.getEncodedImage()}}" style="height: 50px">
+            <div th:if="${defect.getEncodedImage()==null}">No image</div>
+            </td>
             <td><input type="checkbox" th:checked="${defect.getRepaired()}" disabled></td>
             <td>
                 <form class="form-group" th:action="@{/seeDefect}" method="get">

@@ -1,9 +1,11 @@
-package DefectRegistrationSystem;
+package pl.dusinski.defectregistrationsystem.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Base64;
 
 @Entity
 public class Defect {
@@ -24,12 +26,10 @@ public class Defect {
     @DateTimeFormat(pattern = "dd-mm-yyyy")
     private String defectDate;
 
-    private String imagePath;
-
     private Boolean isRepaired;
 
     @Lob
-    String image;
+    private byte[] image;
     public Defect(){}
 
     public Defect(String defectOwner, DefectType defectType, String description, String defectDate){
@@ -82,19 +82,13 @@ public class Defect {
     }
 
 
-    public String getImagePath() {
-        return imagePath;
-    }
 
-    public void setImagePath(String image) {
-        this.imagePath = image;
-    }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -104,5 +98,9 @@ public class Defect {
 
     public void setRepaired(Boolean repaired) {
         isRepaired = repaired;
+    }
+
+    public String getEncodedImage(){
+        return image==null ? null : Base64.getEncoder().encodeToString(this.image);
     }
 }
