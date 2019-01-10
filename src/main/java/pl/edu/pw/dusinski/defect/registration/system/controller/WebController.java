@@ -1,8 +1,11 @@
-package DefectRegistrationSystem;
+package pl.edu.pw.dusinski.defect.registration.system.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,48 +14,35 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import javax.annotation.PostConstruct;
+import pl.edu.pw.dusinski.defect.registration.system.model.Defect;
+import pl.edu.pw.dusinski.defect.registration.system.model.DefectOwner;
+import pl.edu.pw.dusinski.defect.registration.system.repository.DefectOwnerRepository;
+import pl.edu.pw.dusinski.defect.registration.system.repository.DefectRepository;
+import pl.edu.pw.dusinski.defect.registration.system.security.AdminRoleGranter;
+
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.util.Base64;
 import java.util.Collections;
 
 
 @Controller
 public class WebController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebController.class);
 
     @Autowired
-    private InMemoryUserDetailsManager inMemoryUserDetailsManager;
-
+    private UserDetailsManager userDetailsManager;
     @Autowired
     private DefectOwnerRepository defectOwnerRepository;
-
     @Autowired
     private DefectRepository defectRepository;
-
-    @PostConstruct
-    private void initMethod() {
-
-        defectOwnerRepository.save(new DefectOwner("Warbud", "111"));
-        inMemoryUserDetailsManager.createUser(new User("Warbud", "{noop}" + "111", Collections.emptyList()));
-
-        defectOwnerRepository.save(new DefectOwner("KARMAR", "222"));
-        inMemoryUserDetailsManager.createUser(new User("KARMAR", "{noop}" + "222", Collections.emptyList()));
-
-
-        LocalDate date = LocalDate.now();
-        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", date.toString()));
-        defectRepository.deleteAll();
-        defectRepository.save(new Defect("KARMAR", DefectType.Installation, "Wrong lenght of cable", date.toString()));
-        defectRepository.save(new Defect("KARMAR", DefectType.Structure, "Wrong concrete", date.toString()));
-        date = LocalDate.now().minusDays(5);
-        defectRepository.save(new Defect("Warbud", DefectType.Installation, "Wrong pipe", date.toString()));
-        defectRepository.save(new Defect("Warbud", DefectType.Electric, "Wrong cable", date.toString()));
-    }
+    @Autowired(required = false)
+    private AdminRoleGranter adminRoleGranter;
 
     @GetMapping("/")
     public String showMenu() {
+        if (adminRoleGranter != null) {
+            adminRoleGranter.addAdminRole();
+        }
         return "index";
     }
 
@@ -78,19 +68,21 @@ public class WebController {
             return "addDefect";
         }
         try {
-            defect.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+            defect.setImage(file.getBytes());
         } catch (Exception ie) {
         }
         defectRepository.save(defect);
+//        todo przyklad loggera
+        LOGGER.info("Added new defect with id: {}, to owner: {}", defect.getId(), defect.getDefectOwner());
         return "index";
     }
 
     @GetMapping("/defectTable")
     public String showDefectListForm(Model model, Principal principal) {
-
-        if (principal.getName().equals("admin")) {
+//        todo tak sie to powinno sprawdzac
+        if (principal != null && ((UsernamePasswordAuthenticationToken) principal).getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
             model.addAttribute("defectList", defectRepository.findAll());
-        } else {
+        } else if (principal != null && !principal.getName().isEmpty()) {
             model.addAttribute("defectList", defectRepository.findByDefectOwner(principal.getName()));
         }
         return "defectTable";
@@ -118,7 +110,7 @@ public class WebController {
         if (result.hasErrors()) {
             return "addDefectOwner";
         }
-        inMemoryUserDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), Collections.emptyList()));
+        userDetailsManager.createUser(new User(defectOwner.getName(), "{noop}" + defectOwner.getPassword(), Collections.emptyList()));
         defectOwnerRepository.save(defectOwner);
         return "index";
     }

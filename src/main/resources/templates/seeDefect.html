@@ -49,7 +49,7 @@
             </tr>
             <tr>
                 <td>Defect Image</td>
-                <td><img th:src="@{'data:image/jpeg;base64,'+${editedDefect.getImage()}}" style="height: 50px"></td>
+                <td><img th:src="@{'data:image/jpeg;base64,'+${editedDefect.getEncodedImage()}}" style="height: 50px"></td>
             </tr>
             <tr>
                 <td>Is repaired:</td>

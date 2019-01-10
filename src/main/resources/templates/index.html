@@ -3,34 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Main Menu</title>
+    <!--todo radze pobrac wszystko do lokalnego folderu /resources/static wtedy intellij bedzie podpowiadac style podczas pisania-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
 <body>
+<!--todo zeby miec na cala szerokosc strony jumbotron musi byc poza glownym container strony-->
+<div class="jumbotron">
+    <h1>Defect Registration System</h1>
+    <p>by Dusinski</p>
+</div>
+<!--todo docelowo pozbyl bym sie tego jumbotronu, te informacje dal do footera a zamiast tego uzyl https://getbootstrap.com/docs/3.3/components/#navbar-inverted-->
+<!--todo wtedy nie potrzeba bylo by zadnych buttonow jak ponizej i pozbedziesz sie przyciskow go back, bo sa brzydki po prostu :) reszty stron html nie zmienialem, tylko bledy-->
 <div class="container">
-    <div class="jumbotron">
-        <h1>Defect Registration System</h1>
-        <p>by Dusinski</p>
-    </div>
 
-    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-    <div sec:authorize ="hasRole('ROLE_ADMIN')">
-            <form class="form-group" th:action="@{/addDefect}" method ="get">
-                <button type="submit" class="btn btn-default">Add Defect</button>
-            </form>
-
-            <form class="form-group" th:action="@{/addDefectOwner}" method ="get">
-                <button type="submit" class="btn btn-default">Add Defect Owner</button>
-            </form>
-    </div>
-    <form class="form-group" th:action="@{/defectTable}" method ="get">
-        <button type="submit" class="btn btn-default">See List</button>
-    </form>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out">
-    </form>
+    <h2 th:text="'Hello '+${#httpServletRequest.remoteUser}"></h2>
+    <table class="table-hover" sec:authorize="hasRole('ROLE_ADMIN')">
+        <thead>
+        <tr>
+            <th><h3>Admin panel</h3></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Add Defect</td>
+            <td><a th:href="@{/addDefect}" class="btn btn-primary">Add</a></td>
+        </tr>
+        <tr>
+            <td>Add Defect Owner</td>
+            <td><a th:href="@{/addDefectOwner}" class="btn btn-primary">Add</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <!--todo to co jest w tym widoku ponizje bym normalnie wyswietlil na tej stronie ponizej, wtedy uzytkownik nie bedzie mial pustej strony z 1 buttonem-->
+    <a th:href="@{/defectTable}" class="btn btn-primary">See Defect List</a>
+    <br>
+    <br>
+    <a th:href="@{/logout}" class="btn btn-warning">Logout</a>
 </div>
 </body>
 </html>
